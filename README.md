@@ -57,6 +57,7 @@ The `configure` function writes the rbenv initialisation to `.profile`.  The use
 of this is optional, as `rbenv-init` provides a script function to initialise
 rbenv.
 
+The `rbenv-cmd` plan function can execute arbitrary rbenv commands.
 
 ## Prerequisites
 

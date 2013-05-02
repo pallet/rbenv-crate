@@ -123,12 +123,13 @@
      ("eval" (quoted @(rbenv [init "-"] ~options))))))
 
 (defplan rbenv-cmd
-  "Run rbenv"
-  [args {:keys [instance-id] :as options}]
+  "Run rbenv.  You can pass a map of environment variables with the `:env`
+  option."
+  [args {:keys [env instance-id] :as options}]
   (let [{:keys [user] :as settings} (get-settings :rbenv options)]
     (with-action-options {:sudo-user user}
       (exec-checked-script
-       (apply str "rbenv " args)
+       (str "rbenv " (string/join " " args))
        (rbenv-init ~options)
        (rbenv [~@args] ~options)
        (rbenv [rehash] ~options)))))
