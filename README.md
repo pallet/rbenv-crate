@@ -59,8 +59,6 @@ rbenv.
 
 The `rbenv-cmd` plan function can execute arbitrary rbenv commands.
 
-## Prerequisites
-
 ## Support
 
 [On the group](http://groups.google.com/group/pallet-clj), or
