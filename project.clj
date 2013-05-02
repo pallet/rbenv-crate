@@ -1,4 +1,4 @@
-(defproject com.palletops/rbenv-crate "0.8.0-alpha.1"
+(defproject com.palletops/rbenv-crate "0.8.0-SNAPSHOT"
   :description "Pallet crate to install, configure and use rbenv-crate"
   :url "http://palletops.com"
   :license {:name "Eclipse Public License"
