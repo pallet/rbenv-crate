@@ -5,11 +5,15 @@
  [rbenv](https://github.com/sstephenson/rbenv/)
 "
   (:require
+   [clj-schema.schema :refer [def-map-schema map-schema optional-path
+                              sequence-of]]
+   [clojure.string :as string]
    [clojure.tools.logging :refer [debugf]]
    [pallet.action :refer [with-action-options]]
    [pallet.actions :refer [directory exec-checked-script packages plan-when-not
                            remote-directory remote-file]]
    [pallet.api :refer [plan-fn] :as api]
+   [pallet.contracts :refer [any-value check-spec]]
    [pallet.crate :refer [admin-user assoc-settings defmethod-plan defplan
                          get-settings]]
    [pallet.crate-install :as crate-install]
@@ -21,12 +25,28 @@
                                     defmulti-version-plan]]))
 
 ;;; # Settings
+(def-map-schema rbenv-settings-schema
+  [[:urls] (map-schema :loose [])
+   [:versions] (map-schema :loose [])
+   [:user] string?
+   [:install-strategy] keyword?
+   [:install-dir] string?
+   [:plugins-dir] string?
+   [:plugins] (sequence-of keyword?)
+   (optional-path [:install-ruby]) any-value])
+
+(defmacro check-rbenv-settings
+  [m]
+  (check-spec m `rbenv-settings-schema &form))
+
 (defn default-settings
   "Provides default settings, that are merged with any user supplied settings."
   []
   (let [user (:username (admin-user))]
-    {:repos {:rbenv "git://github.com/sstephenson/rbenv.git"
-             :ruby-build "git://github.com/sstephenson/ruby-build.git"}
+    {:urls {:rbenv "https://github.com/sstephenson/rbenv/tarball/v%s"
+           :ruby-build "https://github.com/sstephenson/ruby-build/tarball/v%s"}
+     :versions {:rbenv "0.4.0"
+               :ruby-build "20130501"}
      :user user
      :install-dir (fragment (file (user-home ~user) ".rbenv"))
      :plugins [:ruby-build]}))
@@ -38,8 +58,8 @@
     [os os-version version settings]
   (cond
    (:install-strategy settings) settings
-   :else (assoc settings
-           :install-strategy ::git)))
+   :else (-> settings
+             (assoc :install-strategy ::archive))))
 
 (defn finalise-settings
   "Fill in any blanks for the settings"
@@ -50,33 +70,27 @@
 (defplan settings
   "Settings for rbenv-crate"
   [{:keys [instance-id] :as settings}]
-  (let [settings (merge (default-settings) settings)
+  (let [settings (merge (default-settings) (dissoc settings :instance-id))
         settings (settings-map (:version settings) settings)
         settings (finalise-settings settings)]
+    (check-rbenv-settings settings)
     (debugf "rbenv settings %s" settings)
     (assoc-settings :rbenv settings {:instance-id instance-id})))
 
 ;;; # Install
-(defmethod-plan crate-install/install ::git
+(defmethod-plan crate-install/install ::archive
   [facility instance-id]
-  (let [{:keys [install-dir plugins plugins-dir repos user]}
+  (let [{:keys [install-dir plugins plugins-dir urls versions user]
+         :as settings}
         (get-settings facility {:instance-id instance-id})
         config (fragment (file (user-home ~user) ".ssh" "config"))]
-    (with-action-options {:sudo-user user}
-      (directory (fragment (file (user-home ~user) ".ssh"))
-                 :owner user :mode "0755")
-      (exec-checked-script
-       "Install rbenv"
-       (when (not ("grep" "github.com" ~config))
-         (println "'Host github.com\n\tStrictHostKeyChecking no\n'" ">>" ~config))
-       (when (not (directory? ~install-dir))
-         ("git" clone ~(:rbenv repos) ~install-dir)))
-      (doseq [plugin plugins]
-        (exec-checked-script
-         (str "Install rbenv plugin " (name plugin))
-         (when (not (directory? ~(fragment (file ~plugins-dir ~(name plugin)))))
-           ("git" clone ~(get repos plugin)
-            (file ~plugins-dir ~(name plugin)))))))))
+    (check-rbenv-settings settings)
+    (remote-directory install-dir :owner user
+                      :url (format (urls :rbenv) (versions :rbenv)))
+    (doseq [plugin plugins]
+      (remote-directory
+       (fragment (file ~plugins-dir ~(name plugin)))
+       :owner user :url (format (get urls plugin) (get versions plugin))))))
 
 (defplan install
   "Install rbenv-crate"
@@ -106,7 +120,11 @@
 (defimpl rbenv :default [args {:keys [instance-id] :as options}]
   ~(let [{:keys [install-dir] :as settings} (get-settings :rbenv options)
          rbenv (fragment (file ~install-dir "bin" "rbenv"))]
-     (fragment (~rbenv ~@args))))
+     (fragment (~(if-let [env (:env options)]
+                   (fragment
+                    (~(string/join " " (map (fn [[k v]] (str k "=" v)) env))
+                     (~rbenv ~@args)))
+                   (fragment (~rbenv ~@args)))))))
 
 (defn rbenv-init
   "A script function to initialise rbenv."
@@ -123,12 +141,13 @@
      ("eval" (quoted @(rbenv [init "-"] ~options))))))
 
 (defplan rbenv-cmd
-  "Run rbenv"
-  [args {:keys [instance-id] :as options}]
+  "Run rbenv.  You can pass a map of environment variables with the `:env`
+  option."
+  [args {:keys [env instance-id] :as options}]
   (let [{:keys [user] :as settings} (get-settings :rbenv options)]
     (with-action-options {:sudo-user user}
       (exec-checked-script
-       (apply str "rbenv " args)
+       (str "rbenv " (string/join " " args))
        (rbenv-init ~options)
        (rbenv [~@args] ~options)
        (rbenv [rehash] ~options)))))
@@ -140,7 +159,7 @@ packages call."
   (apply-map
    packages
    :apt ["build-essential" "libssl-dev" "zlib1g-dev"]
-   :yum ["zlib-devel"]
+   :yum ["make" "automake" "gcc" "openssl-devel" "zlib-devel"]
    options))
 
 (defplan install-ruby

@@ -26,5 +26,3 @@ of this is optional, as `rbenv-init` provides a script function to initialise
 rbenv.
 
 The `rbenv-cmd` plan function can execute arbitrary rbenv commands.
-
-## Prerequisites

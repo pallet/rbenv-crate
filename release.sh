@@ -34,7 +34,7 @@ $EDITOR doc-src/USAGE.md
 lein crate-doc || exit 1
 $EDITOR README.md
 git add \
-    resources/pallet_crate/app_deploy_crate/meta.edn \
+    resources/pallet_crate/rbenv_crate/meta.edn \
     doc-src/USAGE.md \
     doc-src/FOOTER.md \
     README.md \
