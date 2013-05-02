@@ -159,7 +159,7 @@ packages call."
   (apply-map
    packages
    :apt ["build-essential" "libssl-dev" "zlib1g-dev"]
-   :yum ["zlib-devel"]
+   :yum ["make" "automake" "gcc" "openssl-devel" "zlib-devel"]
    options))
 
 (defplan install-ruby
