@@ -29,7 +29,7 @@
       </div>
     </div>
       <div id="header">
-        <h1><a href="http://palletops.com"><span class="project-title">Rbenv-crate 0.8.0-SNAPSHOT API documentation</span></a></h1>
+        <h1><a href="http://palletops.com"><span class="project-title">Rbenv-crate 0.8.0-alpha.1 API documentation</span></a></h1>
       </div>
     </header>
     <navigation>
@@ -57,7 +57,7 @@
 </div>
         <div class="ns-vars">
           <div class="public">
-            <h3><a id="var-build-packages" class="source var-name" href="https://github.com/pallet/rbenv-crate/blob/develop/src/pallet/crate/rbenv.clj#L136">build-packages</a></h3>
+            <h3><a id="var-build-packages" class="source var-name" href="https://github.com/pallet/rbenv-crate/blob/develop/src/pallet/crate/rbenv.clj#L155">build-packages</a></h3>
             <h4 class="var-type fn" id="var-type">fn</h4>
             <div class="usage">[{:as options}]</div>
             
@@ -66,7 +66,7 @@
 packages call.</p>
 </div>
           </div><div class="public">
-            <h3><a id="var-configure" class="source var-name" href="https://github.com/pallet/rbenv-crate/blob/develop/src/pallet/crate/rbenv.clj#L88">configure</a></h3>
+            <h3><a id="var-configure" class="source var-name" href="https://github.com/pallet/rbenv-crate/blob/develop/src/pallet/crate/rbenv.clj#L102">configure</a></h3>
             <h4 class="var-type fn" id="var-type">fn</h4>
             <div class="usage">[{:keys [instance-id], :as options}]</div>
             
@@ -74,7 +74,7 @@ packages call.</p>
             <div class="doc"><p>Write all config files</p>
 </div>
           </div><div class="public">
-            <h3><a id="var-default-settings" class="source var-name" href="https://github.com/pallet/rbenv-crate/blob/develop/src/pallet/crate/rbenv.clj#L24">default-settings</a></h3>
+            <h3><a id="var-default-settings" class="source var-name" href="https://github.com/pallet/rbenv-crate/blob/develop/src/pallet/crate/rbenv.clj#L42">default-settings</a></h3>
             <h4 class="var-type fn" id="var-type">fn</h4>
             <div class="usage">[]</div>
             
@@ -82,7 +82,7 @@ packages call.</p>
             <div class="doc"><p>Provides default settings, that are merged with any user supplied settings.</p>
 </div>
           </div><div class="public">
-            <h3><a id="var-finalise-settings" class="source var-name" href="https://github.com/pallet/rbenv-crate/blob/develop/src/pallet/crate/rbenv.clj#L44">finalise-settings</a></h3>
+            <h3><a id="var-finalise-settings" class="source var-name" href="https://github.com/pallet/rbenv-crate/blob/develop/src/pallet/crate/rbenv.clj#L64">finalise-settings</a></h3>
             <h4 class="var-type fn" id="var-type">fn</h4>
             <div class="usage">[{:keys [install-dir], :as settings}]</div>
             
@@ -90,7 +90,7 @@ packages call.</p>
             <div class="doc"><p>Fill in any blanks for the settings</p>
 </div>
           </div><div class="public">
-            <h3><a id="var-install" class="source var-name" href="https://github.com/pallet/rbenv-crate/blob/develop/src/pallet/crate/rbenv.clj#L81">install</a></h3>
+            <h3><a id="var-install" class="source var-name" href="https://github.com/pallet/rbenv-crate/blob/develop/src/pallet/crate/rbenv.clj#L95">install</a></h3>
             <h4 class="var-type fn" id="var-type">fn</h4>
             <div class="usage">[{:keys [instance-id]}]</div>
             
@@ -98,7 +98,7 @@ packages call.</p>
             <div class="doc"><p>Install rbenv-crate</p>
 </div>
           </div><div class="public">
-            <h3><a id="var-install-ruby" class="source var-name" href="https://github.com/pallet/rbenv-crate/blob/develop/src/pallet/crate/rbenv.clj#L146">install-ruby</a></h3>
+            <h3><a id="var-install-ruby" class="source var-name" href="https://github.com/pallet/rbenv-crate/blob/develop/src/pallet/crate/rbenv.clj#L165">install-ruby</a></h3>
             <h4 class="var-type fn" id="var-type">fn</h4>
             <div class="usage">[version &amp; {:keys [instance-id], :as options}]</div>
             
@@ -106,7 +106,7 @@ packages call.</p>
             <div class="doc"><p>Install ruby with rbenv</p>
 </div>
           </div><div class="public">
-            <h3><a id="var-local" class="source var-name" href="https://github.com/pallet/rbenv-crate/blob/develop/src/pallet/crate/rbenv.clj#L160">local</a></h3>
+            <h3><a id="var-local" class="source var-name" href="https://github.com/pallet/rbenv-crate/blob/develop/src/pallet/crate/rbenv.clj#L179">local</a></h3>
             <h4 class="var-type fn" id="var-type">fn</h4>
             <div class="usage">[version &amp; {:keys [instance-id], :as options}]</div>
             
@@ -114,15 +114,16 @@ packages call.</p>
             <div class="doc"><p>Set the local ruby version</p>
 </div>
           </div><div class="public">
-            <h3><a id="var-rbenv-cmd" class="source var-name" href="https://github.com/pallet/rbenv-crate/blob/develop/src/pallet/crate/rbenv.clj#L125">rbenv-cmd</a></h3>
+            <h3><a id="var-rbenv-cmd" class="source var-name" href="https://github.com/pallet/rbenv-crate/blob/develop/src/pallet/crate/rbenv.clj#L143">rbenv-cmd</a></h3>
             <h4 class="var-type fn" id="var-type">fn</h4>
-            <div class="usage">[args {:keys [instance-id], :as options}]</div>
+            <div class="usage">[args {:keys [env instance-id], :as options}]</div>
             
             
-            <div class="doc"><p>Run rbenv</p>
+            <div class="doc"><p>Run rbenv.  You can pass a map of environment variables with the <code>:env</code>
+option.</p>
 </div>
           </div><div class="public">
-            <h3><a id="var-rbenv-init" class="source var-name" href="https://github.com/pallet/rbenv-crate/blob/develop/src/pallet/crate/rbenv.clj#L111">rbenv-init</a></h3>
+            <h3><a id="var-rbenv-init" class="source var-name" href="https://github.com/pallet/rbenv-crate/blob/develop/src/pallet/crate/rbenv.clj#L129">rbenv-init</a></h3>
             <h4 class="var-type fn" id="var-type">fn</h4>
             <div class="usage">[options]</div>
             
@@ -130,7 +131,7 @@ packages call.</p>
             <div class="doc"><p>A script function to initialise rbenv.</p>
 </div>
           </div><div class="public">
-            <h3><a id="var-server-spec" class="source var-name" href="https://github.com/pallet/rbenv-crate/blob/develop/src/pallet/crate/rbenv.clj#L166">server-spec</a></h3>
+            <h3><a id="var-server-spec" class="source var-name" href="https://github.com/pallet/rbenv-crate/blob/develop/src/pallet/crate/rbenv.clj#L185">server-spec</a></h3>
             <h4 class="var-type fn" id="var-type">fn</h4>
             <div class="usage">[settings &amp; {:keys [instance-id], :as options}]</div>
             
@@ -138,7 +139,7 @@ packages call.</p>
             <div class="doc"><p>Returns a server-spec that installs and configures rbenv-crate.</p>
 </div>
           </div><div class="public">
-            <h3><a id="var-settings" class="source var-name" href="https://github.com/pallet/rbenv-crate/blob/develop/src/pallet/crate/rbenv.clj#L50">settings</a></h3>
+            <h3><a id="var-settings" class="source var-name" href="https://github.com/pallet/rbenv-crate/blob/develop/src/pallet/crate/rbenv.clj#L70">settings</a></h3>
             <h4 class="var-type fn" id="var-type">fn</h4>
             <div class="usage">[{:keys [instance-id], :as settings}]</div>
             
